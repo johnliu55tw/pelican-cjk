@@ -3,7 +3,7 @@ Pelican in CJK
 
 Writting Chinese, Japanese and Korean in Pelican smoothly.
 
-.. NOTE::
+NOTE:
    This plugin currently only works when writting in **reStructuredText**.
    It might not work correctly for Markdown. See `Behavior Changes`_ for details.
 
