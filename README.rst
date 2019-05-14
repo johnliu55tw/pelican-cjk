@@ -10,7 +10,7 @@ NOTE:
 Behavior Changes
 ****************
 
-1. Auto spacing
+Auto spacing
 ===============
 
 Insert spaces between an half-width (Alphabets, Numbers, Symbols) word
@@ -25,8 +25,8 @@ After:
 Noted that if the neighbor CJK character is a **punctuation**, space will not be
 added.
 
-2. Remove newline for Chinese paragraph
-=======================================
+Remove newline for CJK paragraph
+===================================
 
 Newline characters in a paragraph will be kept in the output HTML. Browser will
 then interpret this newline character as a **space**. This is fine in English,
@@ -39,3 +39,25 @@ Before:
 
 After:
    這是第一行和第二行
+
+Usage
+*****
+
+Add this plugin to your ``pelicanconf.py``. Refer to
+`pelican-plugins <https://github.com/getpelican/pelican-plugins>`_ for
+more details::
+
+   PLUGINS = ['pelican_cjk']
+
+   # Change the default the behavior
+   CJK_AUTO_SPACING = False
+   ...
+
+These variables can be used to control the behavior:
+
+``CJK_AUTO_SPACING``
+   Set to ``False`` to disable `Auto spacing`_. Default to ``True``.
+
+``CJK_REMOVE_PARAGRAPH_NEWLINE``
+   Set to ``False`` to disable `Remove newline for CJK paragraph`_.
+   Default to ``True``.

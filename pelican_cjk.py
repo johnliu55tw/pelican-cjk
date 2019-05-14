@@ -85,8 +85,11 @@ def main(content):
 
     ret = content._content
 
-    ret = remove_cjk_newline(ret)
-    ret = add_space(ret)
+    if content.settings.get('CJK_REMOVE_PARAGRAPH_NEWLINE', True) is True:
+        ret = remove_cjk_newline(ret)
+
+    if content.settings.get('CJK_AUTO_SPACING', True) is True:
+        ret = add_space(ret)
 
     content._content = ret
 
