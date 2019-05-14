@@ -80,7 +80,7 @@ class RemoveNewlineTestCase(unittest.TestCase):
 
         for data, answer in test_cases:
             with self.subTest(data=data, answer=answer):
-                result = pelican_cjk.remove_cjk_newline(data)
+                result = pelican_cjk.remove_paragraph_newline(data)
 
                 self.assertEqual(result, answer)
 
@@ -97,7 +97,7 @@ class RemoveNewlineTestCase(unittest.TestCase):
 
         for data in test_cases:
             with self.subTest(data=data):
-                result = pelican_cjk.remove_cjk_newline(data)
+                result = pelican_cjk.remove_paragraph_newline(data)
 
                 self.assertEqual(result, data)
 
@@ -124,7 +124,7 @@ class AddSpaceTestCase(unittest.TestCase):
 
         for data, answer in test_cases:
             with self.subTest(data=data, answer=answer):
-                result = pelican_cjk.add_space(data)
+                result = pelican_cjk.auto_spacing(data)
 
                 self.assertEqual(result, answer)
 
@@ -142,13 +142,13 @@ class AddSpaceTestCase(unittest.TestCase):
 
         for data in test_cases:
             with self.subTest(data=data):
-                result = pelican_cjk.add_space(data)
+                result = pelican_cjk.auto_spacing(data)
 
                 self.assertEqual(result, data)
 
 
-@mock.patch('pelican_cjk.remove_cjk_newline')
-@mock.patch('pelican_cjk.add_space')
+@mock.patch('pelican_cjk.remove_paragraph_newline')
+@mock.patch('pelican_cjk.auto_spacing')
 class MainTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -159,24 +159,24 @@ class MainTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_with_default_settings(self, m_add_space, m_remove_newline):
+    def test_with_default_settings(self, m_auto_spacing, m_remove_newline):
         pelican_cjk.main(self.mock_content)
 
         m_remove_newline.assert_called_with('SomeTextThatWillRemainIntact')
-        m_add_space.assert_called_with(m_remove_newline.return_value)
+        m_auto_spacing.assert_called_with(m_remove_newline.return_value)
 
-    def test_with_CJK_REMOVE_PARAGRAPH_NEWLINE_disabled(self, m_add_space, m_remove_newline):
+    def test_with_CJK_REMOVE_PARAGRAPH_NEWLINE_disabled(self, m_auto_spacing, m_remove_newline):
         self.mock_content.settings.update({'CJK_REMOVE_PARAGRAPH_NEWLINE': False})
 
         pelican_cjk.main(self.mock_content)
 
         m_remove_newline.assert_not_called()
-        m_add_space.assert_called_with('SomeTextThatWillRemainIntact')
+        m_auto_spacing.assert_called_with('SomeTextThatWillRemainIntact')
 
-    def test_with_CJK_AUTO_SPACING_disabled(self, m_add_space, m_remove_newline):
+    def test_with_CJK_AUTO_SPACING_disabled(self, m_auto_spacing, m_remove_newline):
         self.mock_content.settings.update({'CJK_AUTO_SPACING': False})
 
         pelican_cjk.main(self.mock_content)
 
         m_remove_newline.assert_called_with('SomeTextThatWillRemainIntact')
-        m_add_space.assert_not_called()
+        m_auto_spacing.assert_not_called()

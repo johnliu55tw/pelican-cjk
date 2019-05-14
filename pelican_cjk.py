@@ -66,11 +66,11 @@ ans_cjk_pattern = re.compile(r'({})({})'.format(
     ranges_as_regex(ANS_RANGES), ranges_as_regex(CJK_RANGES)))
 
 
-def remove_cjk_newline(text):
+def remove_paragraph_newline(text):
     return newline_pattern.sub(r'\1', text)
 
 
-def add_space(text):
+def auto_spacing(text):
     ret = text
 
     ret = cjk_ans_pattern.sub(r'\1 \2', ret)
@@ -86,10 +86,10 @@ def main(content):
     ret = content._content
 
     if content.settings.get('CJK_REMOVE_PARAGRAPH_NEWLINE', True) is True:
-        ret = remove_cjk_newline(ret)
+        ret = remove_paragraph_newline(ret)
 
     if content.settings.get('CJK_AUTO_SPACING', True) is True:
-        ret = add_space(ret)
+        ret = auto_spacing(ret)
 
     content._content = ret
 
