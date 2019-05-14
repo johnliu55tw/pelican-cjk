@@ -1,7 +1,7 @@
 import re
 import unittest
 
-import pelican_cjk as plugin
+import pelican_cjk
 
 
 class RangesAsRegexTestCase(unittest.TestCase):
@@ -12,7 +12,7 @@ class RangesAsRegexTestCase(unittest.TestCase):
             ('\u00A0', '\u00AF'),
         )
 
-        re_range = plugin.ranges_as_regex(data)
+        re_range = pelican_cjk.ranges_as_regex(data)
 
         self.assertEqual(re_range, '[a-z\u00A0-\u00AF]')
 
@@ -23,7 +23,7 @@ class RangesAsRegexTestCase(unittest.TestCase):
             ('!@#$%', ''),
         )
 
-        re_range = plugin.ranges_as_regex(data)
+        re_range = pelican_cjk.ranges_as_regex(data)
 
         self.assertEqual(re_range, '[A\u00A0\u00A1!@#$%]')
 
@@ -35,7 +35,7 @@ class RangesAsRegexTestCase(unittest.TestCase):
             ('a', 'z'),
         )
 
-        re_range = plugin.ranges_as_regex(data)
+        re_range = pelican_cjk.ranges_as_regex(data)
 
         self.assertEqual(re_range, '[A-Z\u00A0!@#a-z]')
 
@@ -43,7 +43,7 @@ class RangesAsRegexTestCase(unittest.TestCase):
 class CjkRangeTestCase(unittest.TestCase):
 
     def is_cjk(self, c):
-        return re.match(plugin.ranges_as_regex(plugin.CJK_RANGES), c) is not None
+        return re.match(pelican_cjk.ranges_as_regex(pelican_cjk.CJK_RANGES), c) is not None
 
     def test_pattern_matched(self):
         self.assertTrue(self.is_cjk('我'))
@@ -79,7 +79,7 @@ class RemoveNewlineTestCase(unittest.TestCase):
 
         for data, answer in test_cases:
             with self.subTest(data=data, answer=answer):
-                result = plugin.remove_cjk_newline(data)
+                result = pelican_cjk.remove_cjk_newline(data)
 
                 self.assertEqual(result, answer)
 
@@ -96,7 +96,7 @@ class RemoveNewlineTestCase(unittest.TestCase):
 
         for data in test_cases:
             with self.subTest(data=data):
-                result = plugin.remove_cjk_newline(data)
+                result = pelican_cjk.remove_cjk_newline(data)
 
                 self.assertEqual(result, data)
 
@@ -123,7 +123,7 @@ class AddSpaceTestCase(unittest.TestCase):
 
         for data, answer in test_cases:
             with self.subTest(data=data, answer=answer):
-                result = plugin.add_space(data)
+                result = pelican_cjk.add_space(data)
 
                 self.assertEqual(result, answer)
 
@@ -141,6 +141,6 @@ class AddSpaceTestCase(unittest.TestCase):
 
         for data in test_cases:
             with self.subTest(data=data):
-                result = plugin.add_space(data)
+                result = pelican_cjk.add_space(data)
 
                 self.assertEqual(result, data)
