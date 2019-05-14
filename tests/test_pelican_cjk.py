@@ -1,7 +1,7 @@
 import re
 import unittest
 
-import pelican_cjk_correct_spaces as plugin
+import pelican_cjk as plugin
 
 
 class RangesAsRegexTestCase(unittest.TestCase):
