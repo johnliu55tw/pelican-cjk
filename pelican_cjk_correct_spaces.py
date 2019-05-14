@@ -1,6 +1,5 @@
 import os
 import re
-import logging
 
 from pelican import signals
 
@@ -67,7 +66,7 @@ ans_cjk_pattern = re.compile(r'({})({})'.format(
     ranges_as_regex(ANS_RANGES), ranges_as_regex(CJK_RANGES)))
 
 
-def remove_newline_spaces(text):
+def remove_cjk_newline(text):
     return newline_pattern.sub(r'\1', text)
 
 
@@ -86,7 +85,7 @@ def main(content):
 
     ret = content._content
 
-    ret = remove_newline_spaces(ret)
+    ret = remove_cjk_newline(ret)
     ret = add_space(ret)
 
     content._content = ret

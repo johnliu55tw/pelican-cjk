@@ -1,22 +1,7 @@
-import os
 import re
 import unittest
 
 import pelican_cjk_correct_spaces as plugin
-
-
-def read_test_data(filename):
-    full_path = os.path.join(
-        os.path.dirname(__file__),
-        'testdata',
-        filename)
-
-    with open(full_path) as f:
-        return f.read()
-
-
-CJK_WITH_NEWLINES = read_test_data('cjk_with_newlines.html')
-ENG_WITH_NEWLINES = read_test_data('eng_with_newlines.html')
 
 
 class RangesAsRegexTestCase(unittest.TestCase):
@@ -85,7 +70,7 @@ class RemoveNewlineTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_remove_newline_if_surrounded_by_CJK(self):
+    def test_newline_removed_if_surrounded_by_CJK(self):
         test_cases = (
             ('你好\n好笑', '你好好笑'),
             ('逗號，\n後面', '逗號，後面'),
@@ -94,11 +79,11 @@ class RemoveNewlineTestCase(unittest.TestCase):
 
         for data, answer in test_cases:
             with self.subTest(data=data, answer=answer):
-                result = plugin.remove_newline_spaces(data)
+                result = plugin.remove_cjk_newline(data)
 
                 self.assertEqual(result, answer)
 
-    def test_not_remove_newline_if_not_surrounded(self):
+    def test_newline_kept_if_not_surrounded(self):
         test_cases = (
             '英文abcd\n後面',
             '<some_tag/>\n後面',
@@ -111,7 +96,7 @@ class RemoveNewlineTestCase(unittest.TestCase):
 
         for data in test_cases:
             with self.subTest(data=data):
-                result = plugin.remove_newline_spaces(data)
+                result = plugin.remove_cjk_newline(data)
 
                 self.assertEqual(result, data)
 
