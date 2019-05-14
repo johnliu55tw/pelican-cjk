@@ -40,6 +40,11 @@ CJK_RANGES = (
     (u'\uD7B0', u'\uD7FF'),             # Hangul Jamo Ext. B
 )
 
+CJK_PUNC_RANGES = CJK_RANGES + (
+    (u'\u3000', u'\u303F'),             # CJK Symbols and Punctuation
+    (u'\uFF00', u'\uFFEF'),             # Halfwidth and Fullwidth Forms
+)
+
 # Alphabets, Numbers and Symbols
 ANS_RANGES = (
     ('a', 'z'),
@@ -52,7 +57,8 @@ ANS_RANGES = (
 )
 
 
-newline_pattern = re.compile(r'{}({})'.format(os.linesep, ranges_as_regex(CJK_RANGES)))
+newline_pattern = re.compile(r'({cjk_punc}){newline}(?=({cjk_punc}))'.format(
+    cjk_punc=ranges_as_regex(CJK_PUNC_RANGES), newline=os.linesep))
 
 cjk_ans_pattern = re.compile(r'({})({})'.format(
     ranges_as_regex(CJK_RANGES), ranges_as_regex(ANS_RANGES)))

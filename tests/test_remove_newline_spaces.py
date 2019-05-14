@@ -86,14 +86,34 @@ class RemoveNewlineTestCase(unittest.TestCase):
         pass
 
     def test_remove_newline_if_surrounded_by_CJK(self):
-        result = plugin.remove_newline_spaces(CJK_WITH_NEWLINES)
+        test_cases = (
+            ('你好\n好笑', '你好好笑'),
+            ('逗號，\n後面', '逗號，後面'),
+            ('（全形括號）\n後面', '（全形括號）後面'),
+        )
 
-        self.assertIn('第一段第一行第二行', result)
+        for data, answer in test_cases:
+            with self.subTest(data=data, answer=answer):
+                result = plugin.remove_newline_spaces(data)
+
+                self.assertEqual(result, answer)
 
     def test_not_remove_newline_if_not_surrounded(self):
-        result = plugin.remove_newline_spaces(ENG_WITH_NEWLINES)
+        test_cases = (
+            '英文abcd\n後面',
+            '<some_tag/>\n後面',
+            '``literal``\n下一行',
+            '`link`_\n下一行',
+            '**emph**\n下一行',
+            '半形逗號,\n下一行',
+            '半形句號.\n下一行',
+        )
 
-        self.assertIn('First line,\nsecond line', result)
+        for data in test_cases:
+            with self.subTest(data=data):
+                result = plugin.remove_newline_spaces(data)
+
+                self.assertEqual(result, data)
 
 
 class AddSpaceTestCase(unittest.TestCase):
