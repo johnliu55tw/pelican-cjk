@@ -147,6 +147,30 @@ class AddSpaceTestCase(unittest.TestCase):
                 self.assertEqual(result, data)
 
 
+class AddSpaceForTaggedTestCase(unittest.TestCase):
+
+    def test_should_add_space_cases(self):
+        test_cases = (
+            ('哈哈<em>ABC</em>', '哈哈 <em>ABC</em>'),
+            ('ABC<em>哈哈</em>', 'ABC <em>哈哈</em>'),
+            ('<strong>ABC</strong>中文', '<strong>ABC</strong> 中文'),
+            ('<strong>中文</strong>ABC', '<strong>中文</strong> ABC'),
+            ('一   <em>2</em>   三<em>4</em>', '一 <em>2</em> 三 <em>4</em>'),
+            ('<em> 1 </em>二   <em>3</em>四', '<em> 1 </em> 二 <em>3</em> 四'),
+            ('這是 <em>中文</em> 好嗎', '這是<em>中文</em>好嗎'),
+            ('ABC<a href=http://a.b.c>連結</a>CBA', 'ABC <a href=http://a.b.c>連結</a> CBA'),
+        )
+
+    def test_should_not_change_cases(self):
+        test_cases = (
+            'abcd α£ 1234',
+            '五&lt;六&gt;七',
+            '這&amp;還在',
+            'abc。123',
+            '123，abc',
+        )
+
+
 @mock.patch('pelican_cjk.remove_paragraph_newline')
 @mock.patch('pelican_cjk.auto_spacing')
 class MainTestCase(unittest.TestCase):
