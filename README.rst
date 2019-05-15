@@ -27,9 +27,8 @@ added:
 Known exceptions
 ----------------
 
-This plugin works on the HTML data without any HTML parser, so there are some
-limitations on auto spacing in several rarely used scenarios:
-
+Auto spacing works on the HTML data without any HTML parser. For simplicity, 
+some less used scenarios are not covered:
 
 1. If the word is in **nested** inline markup, no space will be added around
    it. This is not possible in reStructuredText, so only Markdown users will be
