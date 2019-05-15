@@ -13,7 +13,7 @@ Insert spaces between an half-width (Alphabets, Numbers, Symbols) word
 surrounded by CJK charaters.
 
 Before:
-   中間的English Vocabulary很Beautiful。
+   中間的English Vocabulary單字很Beautiful。
 
 After:
    中間的 English Vocabulary 單字很 Beautiful。
