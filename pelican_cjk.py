@@ -56,13 +56,17 @@ ANS_RANGES = (
 )
 
 
+# Pattern for finding the newline character that should removed.
 newline_pattern = re.compile(r'({cjk_punc}){newline}(?=({cjk_punc}))'.format(
     cjk_punc=ranges_as_regex(CJK_PUNC_RANGES), newline=os.linesep))
 
-cjk_ans_pattern = re.compile(r'({})(<.*?>)?({})'.format(
+# Patterns for finding CJK and ANS written without space in between.
+# The <[^<]*?> is to NOT include more than one tag.
+# Noted that the CJK range does not include CJK punctuation.
+cjk_ans_pattern = re.compile(r'({})(<[^<]*?>)?({})'.format(
     ranges_as_regex(CJK_RANGES), ranges_as_regex(ANS_RANGES)))
 
-ans_cjk_pattern = re.compile(r'({})(<.*?>)?({})'.format(
+ans_cjk_pattern = re.compile(r'({})(<[^<]*?>)?({})'.format(
     ranges_as_regex(ANS_RANGES), ranges_as_regex(CJK_RANGES)))
 
 

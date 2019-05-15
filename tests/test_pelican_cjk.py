@@ -140,11 +140,7 @@ class AutoSpacingTestCase(unittest.TestCase):
             ('<em>1</em>二<em>3</em>四', '<em>1</em> 二 <em>3</em> 四'),
             ('ABC<a href=http://a.b.c>連結</a>CBA', 'ABC <a href=http://a.b.c>連結</a> CBA'),
             ('<em>A</em>NotCJK<em>中文</em>', '<em>A</em>NotCJK <em>中文</em>'),
-            ('<em>A</em><strong>WUT</strong><em>中文</em>',
-             '<em>A</em><strong>WUT</strong> <em>中文</em>'),
             ('<em>中</em>是中文<strong>A</strong>', '<em>中</em>是中文 <strong>A</strong>'),
-            ('<em>中</em><tt>是中文</tt><strong>A</strong>',
-             '<em>中</em><tt>是中文</tt> <strong>A</strong>'),
         )
 
         for data, answer in test_cases:
@@ -176,6 +172,8 @@ class AutoSpacingTestCase(unittest.TestCase):
         test_cases = (
             '這是 <strong>中文</strong> 好嗎',
             'ABC <em>ABC</em> ABC',
+            'Nested<em><strong>行內</strong></em>Markup',
+            '<em>行</em><strong>inside</strong',
         )
 
         for data in test_cases:

@@ -1,11 +1,7 @@
 Pelican in CJK
 ##############
 
-Writting Chinese, Japanese and Korean in Pelican smoothly.
-
-NOTE:
-   This plugin currently only works when writting in **reStructuredText**.
-   It might not work correctly for Markdown. See `Behavior Changes`_ for details.
+Writting Pelican in Chinese, Japanese and Korean smoothly.
 
 Behavior Changes
 ****************
@@ -22,8 +18,33 @@ Before:
 After:
    中間的 English Vocabulary 單字很 Beautiful。
 
-Noted that if the neighbor CJK character is a **punctuation**, space will not be
-added.
+Noted that f the neighbor CJK character is a **punctuation**, space will not be
+added:
+
+   - 我會說 English。
+   - 你如果 Happy，I am happy too。
+
+Known exceptions
+----------------
+
+This plugin works on the HTML data without any HTML parser, so there are some
+limitations on auto spacing in several rarely used scenarios:
+
+
+1. If the word is in **nested** inline markup, no space will be added around
+   it. This is not possible in reStructuredText, so only Markdown users will be
+   affected. Examples (in HTML):
+
+   - ``Nested<em><strong>行內</strong><em>Markup``: Spaces should be added
+     between **Nested**, **行內** and **Markup**. But since **行內** is in
+     nested Markup, spaces won't be added.
+
+2. A word in an inline markup immediately after another inline markup will not
+   be adjusted. Examples:
+
+   - **粗體**\ *italic*
+   - **程式**\ ``foo_bar = 'nice'``\ *寫的不錯*
+
 
 Remove newline for CJK paragraph
 ===================================
