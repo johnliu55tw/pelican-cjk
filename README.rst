@@ -21,8 +21,8 @@ After:
 Noted that f the neighbor CJK character is a **punctuation**, space will not be
 added:
 
-   - 我會說 English。
-   - 你如果 Happy，I am happy too。
+- 我會說 English。
+- 你如果 Happy，I am happy too。
 
 Known exceptions
 ----------------
