@@ -48,10 +48,10 @@ some less used scenarios are not covered:
 Remove newline for CJK paragraph
 ===================================
 
-Newline characters in a paragraph will be kept in the output HTML. Browser will
-then interpret this newline character as a **space**. This is fine in English,
-but it looks weird in CJK. This plugin solve this problem by removed a newline
-character surrounded by CJK characters.
+Newline characters in a paragraph will be kept in the output HTML, then browser
+will interpret this newline character as a **space**. This is fine in English,
+but it looks weird in CJK. This plugin solve this problem by removed the
+newline character surrounded by CJK characters.
 
 Before:
    這是第一行
