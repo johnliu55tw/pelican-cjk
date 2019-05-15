@@ -59,10 +59,10 @@ ANS_RANGES = (
 newline_pattern = re.compile(r'({cjk_punc}){newline}(?=({cjk_punc}))'.format(
     cjk_punc=ranges_as_regex(CJK_PUNC_RANGES), newline=os.linesep))
 
-cjk_ans_pattern = re.compile(r'({})({})'.format(
+cjk_ans_pattern = re.compile(r'({})(<.*?>)?({})'.format(
     ranges_as_regex(CJK_RANGES), ranges_as_regex(ANS_RANGES)))
 
-ans_cjk_pattern = re.compile(r'({})({})'.format(
+ans_cjk_pattern = re.compile(r'({})(<.*?>)?({})'.format(
     ranges_as_regex(ANS_RANGES), ranges_as_regex(CJK_RANGES)))
 
 
@@ -71,10 +71,23 @@ def remove_paragraph_newline(text):
 
 
 def auto_spacing(text):
+
+    def add_space(match):
+        """Add the space to the correct place with regards to the match object.
+        """
+        first_char, tag, second_char = match.groups()
+        if tag is None:  # No HTML tag between first and second char
+            return first_char + ' ' + second_char
+        else:
+            if tag.startswith('</'):  # End tag, space should be behind this tag
+                return first_char + tag + ' ' + second_char
+            else:
+                return first_char + ' ' + tag + second_char
+
     ret = text
 
-    ret = cjk_ans_pattern.sub(r'\1 \2', ret)
-    ret = ans_cjk_pattern.sub(r'\1 \2', ret)
+    ret = cjk_ans_pattern.sub(add_space, ret)
+    ret = ans_cjk_pattern.sub(add_space, ret)
 
     return ret
 

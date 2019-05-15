@@ -102,7 +102,7 @@ class RemoveNewlineTestCase(unittest.TestCase):
                 self.assertEqual(result, data)
 
 
-class AddSpaceTestCase(unittest.TestCase):
+class AutoSpacingTestCase(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -128,6 +128,25 @@ class AddSpaceTestCase(unittest.TestCase):
 
                 self.assertEqual(result, answer)
 
+    def test_with_tag_should_add_space_cases(self):
+        test_cases = (
+            ('A<em>啥</em>B', 'A <em>啥</em> B'),
+            ('中<em>A</em>文', '中 <em>A</em> 文'),
+            ('哈哈<em>ABC</em>', '哈哈 <em>ABC</em>'),
+            ('ABC<em>哈哈</em>', 'ABC <em>哈哈</em>'),
+            ('<strong>ABC</strong>中文', '<strong>ABC</strong> 中文'),
+            ('<strong>中文</strong>ABC', '<strong>中文</strong> ABC'),
+            ('一<em>2</em>三<em>4</em>', '一 <em>2</em> 三 <em>4</em>'),
+            ('<em>1</em>二<em>3</em>四', '<em>1</em> 二 <em>3</em> 四'),
+            ('ABC<a href=http://a.b.c>連結</a>CBA', 'ABC <a href=http://a.b.c>連結</a> CBA'),
+        )
+
+        for data, answer in test_cases:
+            with self.subTest(data=data):
+                result = pelican_cjk.auto_spacing(data)
+
+                self.assertEqual(result, answer)
+
     def test_should_not_change_cases(self):
         test_cases = (
             'abcd α£ 1234',
@@ -146,29 +165,17 @@ class AddSpaceTestCase(unittest.TestCase):
 
                 self.assertEqual(result, data)
 
-
-class AddSpaceForTaggedTestCase(unittest.TestCase):
-
-    def test_should_add_space_cases(self):
+    def test_with_tag_should_not_change_cases(self):
         test_cases = (
-            ('哈哈<em>ABC</em>', '哈哈 <em>ABC</em>'),
-            ('ABC<em>哈哈</em>', 'ABC <em>哈哈</em>'),
-            ('<strong>ABC</strong>中文', '<strong>ABC</strong> 中文'),
-            ('<strong>中文</strong>ABC', '<strong>中文</strong> ABC'),
-            ('一   <em>2</em>   三<em>4</em>', '一 <em>2</em> 三 <em>4</em>'),
-            ('<em> 1 </em>二   <em>3</em>四', '<em> 1 </em> 二 <em>3</em> 四'),
-            ('這是 <em>中文</em> 好嗎', '這是<em>中文</em>好嗎'),
-            ('ABC<a href=http://a.b.c>連結</a>CBA', 'ABC <a href=http://a.b.c>連結</a> CBA'),
+            '這是 <strong>中文</strong> 好嗎',
+            'ABC <em>ABC</em> ABC',
         )
 
-    def test_should_not_change_cases(self):
-        test_cases = (
-            'abcd α£ 1234',
-            '五&lt;六&gt;七',
-            '這&amp;還在',
-            'abc。123',
-            '123，abc',
-        )
+        for data in test_cases:
+            with self.subTest(data=data):
+                result = pelican_cjk.auto_spacing(data)
+
+                self.assertEqual(result, data)
 
 
 @mock.patch('pelican_cjk.remove_paragraph_newline')
