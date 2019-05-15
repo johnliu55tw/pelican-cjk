@@ -139,6 +139,12 @@ class AutoSpacingTestCase(unittest.TestCase):
             ('一<em>2</em>三<em>4</em>', '一 <em>2</em> 三 <em>4</em>'),
             ('<em>1</em>二<em>3</em>四', '<em>1</em> 二 <em>3</em> 四'),
             ('ABC<a href=http://a.b.c>連結</a>CBA', 'ABC <a href=http://a.b.c>連結</a> CBA'),
+            ('<em>A</em>NotCJK<em>中文</em>', '<em>A</em>NotCJK <em>中文</em>'),
+            ('<em>A</em><strong>WUT</strong><em>中文</em>',
+             '<em>A</em><strong>WUT</strong> <em>中文</em>'),
+            ('<em>中</em>是中文<strong>A</strong>', '<em>中</em>是中文 <strong>A</strong>'),
+            ('<em>中</em><tt>是中文</tt><strong>A</strong>',
+             '<em>中</em><tt>是中文</tt> <strong>A</strong>'),
         )
 
         for data, answer in test_cases:
@@ -153,6 +159,7 @@ class AutoSpacingTestCase(unittest.TestCase):
             '哈<some_tag/>啥',
             '中文<p>啥</p>中文',
             '中文 <p>啥</p> 中文',
+            'abc <em>def</em> ghi',
             '五&lt;六&gt;七',
             '這&amp;還在',
             'abc。123',
