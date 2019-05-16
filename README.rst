@@ -3,8 +3,26 @@ Pelican in CJK
 
 Writting Pelican in Chinese, Japanese and Korean smoothly.
 
+
 Behavior Changes
 ****************
+
+
+Remove newline for CJK paragraph
+===================================
+
+Newline characters in a paragraph will be kept in the output HTML, then browser
+will interpret this newline character as a **space**. This is fine in English,
+but it looks weird in CJK. This plugin solve this problem by removed the
+newline character surrounded by CJK characters.
+
+Before:
+   這是第一行
+   和第二行
+
+After:
+   這是第一行和第二行
+
 
 Auto spacing
 ===============
@@ -27,7 +45,7 @@ added:
 Known exceptions
 ----------------
 
-Auto spacing works on the HTML data without any HTML parser. For simplicity, 
+Auto spacing works on the HTML data without any HTML parser. For simplicity,
 some less used scenarios are not covered:
 
 1. If the word is in **nested** inline markup, no space will be added around
@@ -45,21 +63,6 @@ some less used scenarios are not covered:
    - **程式**\ ``foo_bar = 'nice'``\ *寫的不錯*
 
 
-Remove newline for CJK paragraph
-===================================
-
-Newline characters in a paragraph will be kept in the output HTML, then browser
-will interpret this newline character as a **space**. This is fine in English,
-but it looks weird in CJK. This plugin solve this problem by removed the
-newline character surrounded by CJK characters.
-
-Before:
-   這是第一行
-   和第二行
-
-After:
-   這是第一行和第二行
-
 Remove spacing around inline markups
 ====================================
 
@@ -75,6 +78,7 @@ After:
 
 Noted that this has the same limitation with `Auto spacing`_. See
 `Known exceptions`_ for details.
+
 
 Usage
 *****
