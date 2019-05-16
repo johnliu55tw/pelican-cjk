@@ -71,11 +71,15 @@ class RemoveNewlineTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_newline_removed_if_surrounded_by_CJK(self):
+    def test_newline_should_be_removed_cases(self):
         test_cases = (
             ('你好\n好笑', '你好好笑'),
             ('逗號，\n後面', '逗號，後面'),
             ('（全形括號）\n後面', '（全形括號）後面'),
+            ('句號。\nabc', '句號。abc'),
+            ('括號）\nabc', '括號）abc'),
+            ('abc\n，中文', 'abc，中文'),
+            ('。\na\n，\nb', '。a，b'),
         )
 
         for data, answer in test_cases:
@@ -84,10 +88,10 @@ class RemoveNewlineTestCase(unittest.TestCase):
 
                 self.assertEqual(result, answer)
 
-    def test_newline_kept_if_not_surrounded(self):
+    def test_newline_should_be_kept_cases(self):
         test_cases = (
             '英文abcd\n後面',
-            '<some_tag/>\n後面',
+            '<em>中文</em>\n後面',
             '``literal``\n下一行',
             '`link`_\n下一行',
             '**emph**\n下一行',

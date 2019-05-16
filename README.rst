@@ -23,6 +23,16 @@ Before:
 After:
    這是第一行和第二行
 
+In addition, if one of the characters surrounded the newline character is a
+punctuation, it will also be removed.
+
+Before:
+   句號。
+   English
+
+After:
+   句號。English
+
 
 Auto spacing
 ===============
@@ -36,8 +46,8 @@ Before:
 After:
    中間的 English Vocabulary 單字很 Beautiful。
 
-Noted that f the neighbor CJK character is a **punctuation**, space will not be
-added:
+Noted that if the neighbor CJK character is a **punctuation**, space will not
+be added:
 
 - 我會說 English。
 - 你如果 Happy，I am happy too。

@@ -39,10 +39,12 @@ CJK_RANGES = (
     (u'\uD7B0', u'\uD7FF'),             # Hangul Jamo Ext. B
 )
 
-CJK_PUNC_RANGES = CJK_RANGES + (
+PUNC_RANGES = (
     (u'\u3000', u'\u303F'),             # CJK Symbols and Punctuation
     (u'\uFF00', u'\uFFEF'),             # Halfwidth and Fullwidth Forms
 )
+
+CJK_PUNC_RANGES = CJK_RANGES + PUNC_RANGES
 
 # Alphabets, Numbers and Symbols
 ANS_RANGES = (
@@ -56,9 +58,16 @@ ANS_RANGES = (
 )
 
 
-# Pattern for finding the newline character that should removed.
+# Patterns for finding the newline character that should removed.
 newline_pattern = re.compile(r'({cjk_punc}){newline}(?=({cjk_punc}))'.format(
     cjk_punc=ranges_as_regex(CJK_PUNC_RANGES), newline=os.linesep))
+
+punc_ans_pattern = re.compile(r'({}){}(?=({}))'.format(
+    ranges_as_regex(PUNC_RANGES), os.linesep, ranges_as_regex(ANS_RANGES)))
+
+ans_punc_pattern = re.compile(r'({}){}(?=({}))'.format(
+    ranges_as_regex(ANS_RANGES), os.linesep, ranges_as_regex(PUNC_RANGES)))
+
 
 # Patterns for finding CJK and ANS written without space in between.
 # The <[^<]*?> is to NOT include more than one tag.
@@ -76,7 +85,13 @@ cjk_tag_cjk_pattern = re.compile(r'(?<={cjk_punc}) *(<[^<]*?>) *(?={cjk_punc})'.
 
 
 def remove_paragraph_newline(text):
-    return newline_pattern.sub(r'\1', text)
+    ret = text
+
+    ret = newline_pattern.sub(r'\1', ret)
+    ret = punc_ans_pattern.sub(r'\1', ret)
+    ret = ans_punc_pattern.sub(r'\1', ret)
+
+    return ret
 
 
 def auto_spacing(text):
