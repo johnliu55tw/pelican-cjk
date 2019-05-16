@@ -60,6 +60,22 @@ Before:
 After:
    這是第一行和第二行
 
+Remove spacing around inline markups
+====================================
+
+This is mainly for reStructuredText, since it requires a space before and after
+an inline markup. Because this is a more aggressive behavior, it's separated
+from `Auto spacing`_ which you can disabled independently.
+
+Before:
+   中文的 **粗體** 會有空格。
+
+After:
+   中文的\ **粗體**\ 有空格。
+
+Noted that this has the same limitation with `Auto spacing`_. See
+`Known exceptions`_ for details.
+
 Usage
 *****
 
@@ -81,3 +97,7 @@ These variables can be used to control the behavior:
 ``CJK_REMOVE_PARAGRAPH_NEWLINE``
    Set to ``False`` to disable `Remove newline for CJK paragraph`_.
    Default to ``True``.
+
+``CJK_REMOVE_MARKUP_SPACING``
+   Set to ``False`` to disable `Remove spacing around inline markups`_.
+   Defautl to ``True``.

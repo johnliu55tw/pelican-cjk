@@ -69,6 +69,11 @@ cjk_ans_pattern = re.compile(r'({})(<[^<]*?>)?({})'.format(
 ans_cjk_pattern = re.compile(r'({})(<[^<]*?>)?({})'.format(
     ranges_as_regex(ANS_RANGES), ranges_as_regex(CJK_RANGES)))
 
+# Patterns for finding CJK-tag-CJK
+# The <[^<]*?> is to NOT include more than one tag.
+cjk_tag_cjk_pattern = re.compile(r'(?<={cjk_punc}) *(<[^<]*?>) *(?={cjk_punc})'.format(
+    cjk_punc=ranges_as_regex(CJK_PUNC_RANGES)))
+
 
 def remove_paragraph_newline(text):
     return newline_pattern.sub(r'\1', text)
@@ -96,6 +101,10 @@ def auto_spacing(text):
     return ret
 
 
+def remove_markup_spacing(text):
+    return cjk_tag_cjk_pattern.sub(r'\1', text)
+
+
 def main(content):
     if content._content is None:
         return
@@ -107,6 +116,9 @@ def main(content):
 
     if content.settings.get('CJK_AUTO_SPACING', True) is True:
         ret = auto_spacing(ret)
+
+    if content.settings.get('CJK_REMOVE_MARKUP_SPACING', True) is True:
+        ret = remove_markup_spacing(ret)
 
     content._content = ret
 

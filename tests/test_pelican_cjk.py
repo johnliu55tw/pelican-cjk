@@ -183,6 +183,47 @@ class AutoSpacingTestCase(unittest.TestCase):
                 self.assertEqual(result, data)
 
 
+class RemoveMarkupSpacingTestCase(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_should_remove_space_cases(self):
+        test_cases = (
+            ('中文 <em>中文</em>', '中文<em>中文</em>'),
+            ('<em>中文</em> 中文', '<em>中文</em>中文'),
+            ('你 <em>好</em> 嗎 <strong>嗨</strong> 嗨',
+             '你<em>好</em>嗎<strong>嗨</strong>嗨'),
+        )
+
+        for data, answer in test_cases:
+            with self.subTest(data=data):
+                result = pelican_cjk.remove_markup_spacing(data)
+
+                self.assertEqual(result, answer)
+
+    def test_should_not_change_cases(self):
+        test_cases = (
+            '中文 中文 中文',
+            'ABC <em>中文</em>',
+            '<em>中文</em> ABC',
+            '中文 <em>ABC</em>',
+            '<em>中文</em> ABC',
+            '<strong><em>中文</strong></em> 中文'
+            '中文 <strong><em>中文</strong></em>'
+        )
+
+        for data in test_cases:
+            with self.subTest(data=data):
+                result = pelican_cjk.remove_markup_spacing(data)
+
+                self.assertEqual(result, data)
+
+
+@mock.patch('pelican_cjk.remove_markup_spacing')
 @mock.patch('pelican_cjk.remove_paragraph_newline')
 @mock.patch('pelican_cjk.auto_spacing')
 class MainTestCase(unittest.TestCase):
@@ -195,24 +236,56 @@ class MainTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_with_default_settings(self, m_auto_spacing, m_remove_newline):
+    def test_with_default_settings(
+            self,
+            m_auto_spacing,
+            m_remove_newline,
+            m_remove_markup_spacing):
+
         pelican_cjk.main(self.mock_content)
 
         m_remove_newline.assert_called_with('SomeTextThatWillRemainIntact')
         m_auto_spacing.assert_called_with(m_remove_newline.return_value)
+        m_remove_markup_spacing.assert_called_with(m_auto_spacing.return_value)
 
-    def test_with_CJK_REMOVE_PARAGRAPH_NEWLINE_disabled(self, m_auto_spacing, m_remove_newline):
+    def test_with_CJK_REMOVE_PARAGRAPH_NEWLINE_disabled(
+            self,
+            m_auto_spacing,
+            m_remove_newline,
+            m_remove_markup_spacing):
+
         self.mock_content.settings.update({'CJK_REMOVE_PARAGRAPH_NEWLINE': False})
 
         pelican_cjk.main(self.mock_content)
 
         m_remove_newline.assert_not_called()
         m_auto_spacing.assert_called_with('SomeTextThatWillRemainIntact')
+        m_remove_markup_spacing.assert_called_with(m_auto_spacing.return_value)
 
-    def test_with_CJK_AUTO_SPACING_disabled(self, m_auto_spacing, m_remove_newline):
+    def test_with_CJK_AUTO_SPACING_disabled(
+            self,
+            m_auto_spacing,
+            m_remove_newline,
+            m_remove_markup_spacing):
+
         self.mock_content.settings.update({'CJK_AUTO_SPACING': False})
 
         pelican_cjk.main(self.mock_content)
 
         m_remove_newline.assert_called_with('SomeTextThatWillRemainIntact')
         m_auto_spacing.assert_not_called()
+        m_remove_markup_spacing.assert_called_with(m_remove_newline.return_value)
+
+    def test_with_REMOVE_CJK_MAKRUP_SPACING_disabled(
+            self,
+            m_auto_spacing,
+            m_remove_newline,
+            m_remove_markup_spacing):
+
+        self.mock_content.settings.update({'CJK_REMOVE_MARKUP_SPACING': False})
+
+        pelican_cjk.main(self.mock_content)
+
+        m_remove_newline.assert_called_with('SomeTextThatWillRemainIntact')
+        m_auto_spacing.assert_called_with(m_remove_newline.return_value)
+        m_remove_markup_spacing.assert_not_called()
