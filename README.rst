@@ -51,11 +51,11 @@ be added:
 - 我會說 English。
 - 你如果 Happy，I am happy too。
 
-Known exceptions
-----------------
+Known exceptions and notices
+----------------------------
 
 Auto spacing works on the HTML data without any HTML parser. For simplicity,
-some less used scenarios are not covered:
+some less used scenarios are worth noticing:
 
 1. If the word is in **nested** inline markup, no space will be added around
    it. This is not possible in reStructuredText, so only Markdown users will be
@@ -70,6 +70,10 @@ some less used scenarios are not covered:
 
    - **粗體**\ *italic*
    - **程式**\ ``foo_bar = 'nice'``\ *寫的不錯*
+
+3. Text in
+   `literal block <http://docutils.sourceforge.net/docs/user/rst/quickref.html#literal-blocks>`_
+   will be processed. Try not to mix CJK and English in this block.
 
 
 Remove spacing around inline markups
@@ -86,7 +90,7 @@ After:
    中文的\ **粗體**\ 有空格。
 
 Noted that this has the same limitation as `Auto spacing`_. See
-`Known exceptions`_ for details.
+`Known exceptions and notices`_ for details.
 
 
 Usage
