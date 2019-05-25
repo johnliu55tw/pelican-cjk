@@ -76,7 +76,7 @@ some less used scenarios are worth noticing:
 
 4. Text in
    `literal block <http://docutils.sourceforge.net/docs/user/rst/quickref.html#literal-blocks>`_
-   will be processed. Try not to mix CJK and English in this block.
+   will also be adjusted. Try not to mix CJK and English in this block.
 
 
 Remove spacing around inline markups
